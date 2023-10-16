@@ -6,3 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+rand = "0.8.5"
+snarkvm-console-account = "0.15.4"
+snarkvm-console-network = "0.15.4"
+snarkvm-console-program = "0.15.4"
+snarkvm-console-types = "0.15.4"
+snarkvm-console-types-scalar = "0.15.4"
