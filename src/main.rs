@@ -4,6 +4,8 @@ use snarkvm_console_program::Value;
 use snarkvm_console_types::{Field, Scalar, Group};
 use snarkvm_console_types_scalar::TestRng;
 
+use crate::keys::trusted_keygen;
+
 mod keys;
 mod preprocess;
 mod utils;
@@ -117,5 +119,9 @@ fn main() {
     println!("is signature verified? {:?}", verify);
 
     // Constructing a FROST Aleo Multisig out of the private key
+    println!("------- Constructing FROST Keyshares from sk_sig---------");
+    let (shares, public_keys) = trusted_keygen(3, 2, &private_key.sk_sig(), rng);
+    println!("Key shares are {:?}", shares);
+    println!("public keys for key shares are {:?}", public_keys);
 
 }
