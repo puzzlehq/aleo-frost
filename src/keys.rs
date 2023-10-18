@@ -6,6 +6,8 @@ use rand::Rng;
 use core::num;
 use std::collections::HashMap;
 
+use crate::utils::*;
+
 
 // The public key used to verify a threshold signature made by a group of signers
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -147,7 +149,7 @@ pub fn trusted_keygen<R: Rng> (
 pub fn reconstruct_secret(
     participants: &[SignerShare]
 ) -> SignerSecretKey {
-    let indexes: &[u64] = participants.iter().map(|p| p.participant_index).collect()::Vec<_>>();
+    let indexes = participants.iter().map(|p| p.participant_index).collect()::Vec<_>>();
 
     let mut reconstructed_secret = Scalar::<Testnet3>::zero();
 
