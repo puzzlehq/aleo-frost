@@ -2,7 +2,7 @@ use snarkvm_console_network::{Network, Testnet3};
 use snarkvm_console_types::{Group, Scalar, U8, U64};
 use snarkvm_console_types_scalar::{Uniform, FromField, ToField, Zero};
 
-use rand::Rng;
+use rand::{Rng, Error};
 use core::num;
 use std::collections::HashMap;
 
@@ -148,13 +148,13 @@ pub fn trusted_keygen<R: Rng> (
 
 pub fn reconstruct_secret(
     participants: &[SignerShare]
-) -> SignerSecretKey {
-    let indexes = participants.iter().map(|p| p.participant_index).collect()::Vec<_>>();
+) -> Result<SignerSecretKey, Error> {
+    let indexes: Vec<u64> = participants.iter().map(|p| p.participant_index).collect();
 
     let mut reconstructed_secret = Scalar::<Testnet3>::zero();
 
     for participant in participants {
-        let coeff = calculate_lagrange_coefficients(participant.participant_index, &indexes)?;
+        let coeff = calculate_lagrange_coefficients(participant.participant_index, &indexes).unwrap();
 
         reconstructed_secret = reconstructed_secret + participant.secret_key.0 * coeff;
     }

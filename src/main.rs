@@ -4,7 +4,7 @@ use snarkvm_console_program::Value;
 use snarkvm_console_types::{Field, Scalar, Group};
 use snarkvm_console_types_scalar::TestRng;
 
-use crate::keys::trusted_keygen;
+use crate::{keys::{trusted_keygen, reconstruct_secret}, preprocess::preprocess};
 
 mod keys;
 mod preprocess;
@@ -123,5 +123,22 @@ fn main() {
     let (shares, public_keys) = trusted_keygen(3, 2, &private_key.sk_sig(), rng);
     println!("Key shares are {:?}", shares);
     println!("public keys for key shares are {:?}", public_keys);
+
+    // Confirming that we can reconstruct the sk_sig from the new shares
+    println!("------- Reconstructing sk_sig from FROST Keyshares ---------");
+    let reconstructed_secret = reconstruct_secret(&shares).unwrap();
+    println!("Reconstructed secret is {:?}", reconstructed_secret);
+    println!("Does this match sk_sig? {:?}", reconstructed_secret.0 == private_key.sk_sig());
+
+    // Choosing 2 signers and computing preprocess round
+    println!("------- RD 1: Preprocessing  ---------");
+    println!("------- Computing nonces for 2 out of 3 signing  ---------");
+    let (signing_nonces_1, signing_commitments_1) = preprocess(1, 1, rng);
+    let (signing_nonces_2, signing_commitments_2) = preprocess(1, 2, rng);
+    println!("Signing nonces for signer 1 is {:?}", signing_nonces_1);
+    println!("Signing commitments for signer 1 is {:?}", signing_commitments_1);
+    println!("Signing nonces for signer 2 is {:?}", signing_nonces_2);
+    println!("Signing commitments for signer 2 is {:?}", signing_commitments_2);
+
 
 }
