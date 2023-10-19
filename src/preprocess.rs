@@ -5,7 +5,7 @@ use snarkvm_console_types_scalar::{Uniform, FromField, ToField, One, Zero, Inver
 use rand::{Rng, Error};
 
 // The hiding and binding nonces used (only once) for signing operation
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, Copy, PartialEq, Eq)]
 pub struct SigningNonce {
     // d\_{ij}
     pub(crate) hiding: Scalar<Testnet3>,
@@ -22,7 +22,7 @@ impl SigningNonce {
 }
 
 // A precomputed commitment share
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, Copy, PartialEq, Eq)]
 pub struct SigningCommitment {
     // The index of the participant.
     pub(crate) participant_index: u64,

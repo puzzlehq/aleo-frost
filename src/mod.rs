@@ -1,5 +1,5 @@
 mod frost;
-pub use frost;
+pub use frost::*;
 
 mod keys;
 pub use keys::*;
