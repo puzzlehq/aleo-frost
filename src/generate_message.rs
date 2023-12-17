@@ -1,0 +1,1 @@
+// Generating message for multisig signing
