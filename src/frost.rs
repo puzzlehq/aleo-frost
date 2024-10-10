@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::{keys::*, preprocess::*, utils::*};
 
-use snarkvm_console_network::{Network, Testnet3};
+use snarkvm_console_network::{Network, TestnetV0};
 use snarkvm_console_types::{Group, Scalar, U8, U64};
 use snarkvm_console_types_scalar::{Uniform, FromField, ToField, Zero, anyhow, Field, Itertools};
 use snarkvm_console_account::{private_key::*, compute_key::*, view_key::*, signature::*, Address};
@@ -17,7 +17,7 @@ pub struct PartialThresholdSignature {
     // The index of the participant
     pub participant_index: u64,
     // The participant's signature over the message
-    pub partial_signature: Scalar<Testnet3>,
+    pub partial_signature: Scalar<TestnetV0>,
 }
 
 /// Generate a new partial threshold signature for a participant.
@@ -39,11 +39,11 @@ impl PartialThresholdSignature {
         participant_signing_share: &SignerShare,
         signing_nonce: &SigningNonce,
         signing_commitments: Vec<SigningCommitment>,
-        message: Vec<Field<Testnet3>>,
-        pr_sig: Group<Testnet3>,
+        message: Vec<Field<TestnetV0>>,
+        pr_sig: Group<TestnetV0>,
     ) -> Result<Self, Error> {
         // Calculating rho_i in order to calculate R
-        let mut binding_values: HashMap<u64, Scalar<Testnet3>> = HashMap::with_capacity(signing_commitments.len());
+        let mut binding_values: HashMap<u64, Scalar<TestnetV0>> = HashMap::with_capacity(signing_commitments.len());
         for commitment in &signing_commitments {
             let rho_i = calculate_binding_value(commitment.participant_index, &signing_commitments, &message);
             binding_values.insert(commitment.participant_index, rho_i);
@@ -51,7 +51,7 @@ impl PartialThresholdSignature {
 
         let signer_binding_value = binding_values
             .get(&participant_signing_share.participant_index)
-            .ok_or_else(|| anyhow!("Missing binding value")).unwrap(); 
+            .ok_or_else(|| anyhow!("Missing binding value")).unwrap();
 
         // Calculate the group commitment R as Product of (Di*Ei^rho_i)*...(Dn*En^rho_n)
         println!("---------INSIDE FROST: committing nonce to use with signature---------"); 
@@ -60,7 +60,7 @@ impl PartialThresholdSignature {
 
         // Generate the challenge for the signature
         println!("---------INSIDE FROST: generating address for constructing the hash preimage for the signature's challenge---------");
-        let address = Address::<Testnet3>::try_from(ComputeKey::<Testnet3>::try_from((participant_signing_share.group_public_key.0, pr_sig)).unwrap()).unwrap();
+        let address = Address::<TestnetV0>::try_from(ComputeKey::<TestnetV0>::try_from((participant_signing_share.group_public_key.0, pr_sig)).unwrap()).unwrap();
         println!("INSIDE FROST: address from compute key is {:?}", address);
 
         println!("---------INSIDE FROST: constructing the hash preimage for the signature's challenge---------");

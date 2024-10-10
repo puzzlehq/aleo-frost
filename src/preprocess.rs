@@ -1,4 +1,4 @@
-use snarkvm_console_network::{Network, Testnet3};
+use snarkvm_console_network::{Network, TestnetV0};
 use snarkvm_console_types::{Group, Scalar, U8, U64};
 use snarkvm_console_types_scalar::{Uniform, FromField, ToField, One, Zero, Inverse};
 
@@ -8,16 +8,16 @@ use rand::{Rng, Error};
 #[derive(Clone, Debug, Copy, PartialEq, Eq)]
 pub struct SigningNonce {
     // d\_{ij}
-    pub(crate) hiding: Scalar<Testnet3>,
+    pub(crate) hiding: Scalar<TestnetV0>,
     // e\_{ij}
-    pub(crate) binding: Scalar<Testnet3>,
+    pub(crate) binding: Scalar<TestnetV0>,
 }
 
 impl SigningNonce {
     pub fn new<R: Rng>(
         rng: &mut R
     ) -> Self {
-        Self { hiding: (Scalar::<Testnet3>::rand(rng)), binding: (Scalar::<Testnet3>::rand(rng)) }
+        Self { hiding: (Scalar::<TestnetV0>::rand(rng)), binding: (Scalar::<TestnetV0>::rand(rng)) }
     }
 }
 
@@ -27,9 +27,9 @@ pub struct SigningCommitment {
     // The index of the participant.
     pub(crate) participant_index: u64,
     // The hiding commitment - D\_{ij}
-    pub(crate) hiding: Group<Testnet3>,
+    pub(crate) hiding: Group<TestnetV0>,
     // The binding commitment - E\_{ij}
-    pub(crate) binding: Group<Testnet3>,
+    pub(crate) binding: Group<TestnetV0>,
 }
 
 impl SigningCommitment {

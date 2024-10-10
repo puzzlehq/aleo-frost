@@ -7,8 +7,33 @@ edition = "2021"
 
 [dependencies]
 rand = "0.8.5"
-snarkvm-console-account = "0.15.4"
-snarkvm-console-network = "0.15.4"
-snarkvm-console-program = "0.15.4"
-snarkvm-console-types = "0.15.4"
-snarkvm-console-types-scalar = "0.15.4"
+# snarkvm-console-account = "0.15.4"
+# snarkvm-console-network = "0.15.4"
+# snarkvm-console-program = "0.15.4"
+# snarkvm-console-types = "0.15.4"
+# snarkvm-console-types-scalar = "0.15.4"
+
+[dependencies.snarkvm-console-account]
+# version = "=0.16.19"
+git = "https://github.com/puzzlehq/snarkVM.git"
+branch = "authorization-deserialization-fix"
+
+[dependencies.snarkvm-console-network]
+# version = "=0.16.19"
+git = "https://github.com/puzzlehq/snarkVM.git"
+branch = "authorization-deserialization-fix"
+
+[dependencies.snarkvm-console-program]
+# version = "=0.16.19"
+git = "https://github.com/puzzlehq/snarkVM.git"
+branch = "authorization-deserialization-fix"
+
+[dependencies.snarkvm-console-types]
+# version = "=0.16.19"
+git = "https://github.com/puzzlehq/snarkVM.git"
+branch = "authorization-deserialization-fix"
+
+[dependencies.snarkvm-console-types-scalar]
+# version = "=0.16.19"
+git = "https://github.com/puzzlehq/snarkVM.git"
+branch = "authorization-deserialization-fix"
