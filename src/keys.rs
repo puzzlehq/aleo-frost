@@ -3,7 +3,6 @@ use snarkvm_console_types::{Group, Scalar, U8, U64};
 use snarkvm_console_types_scalar::{Uniform, FromField, ToField, Zero};
 
 use rand::{Rng, Error};
-use core::num;
 use std::collections::HashMap;
 
 use crate::utils::*;

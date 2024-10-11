@@ -1,10 +1,9 @@
-use core::num;
 use std::collections::HashMap;
 
 use rand::Error;
 use snarkvm_console_network::{Network, TestnetV0};
-use snarkvm_console_types::{Group, Scalar, U8, U64};
-use snarkvm_console_types_scalar::{Uniform, FromField, ToField, ToFields, One, Zero, Inverse, Field, anyhow};
+use snarkvm_console_types::{Group, Scalar, U64};
+use snarkvm_console_types_scalar::{FromField, ToField, One, Zero, Inverse, Field, anyhow};
 
 use crate::preprocess::SigningCommitment;
 

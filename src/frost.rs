@@ -3,11 +3,11 @@ use std::collections::HashMap;
 use crate::{keys::*, preprocess::*, utils::*};
 
 use snarkvm_console_network::{Network, TestnetV0};
-use snarkvm_console_types::{Group, Scalar, U8, U64};
-use snarkvm_console_types_scalar::{Uniform, FromField, ToField, Zero, anyhow, Field, Itertools};
-use snarkvm_console_account::{private_key::*, compute_key::*, view_key::*, signature::*, Address};
+use snarkvm_console_types::{Group, Scalar};
+use snarkvm_console_types_scalar::{anyhow, Field};
+use snarkvm_console_account::{compute_key::*, Address};
 
-use rand::{Rng, Error};
+use rand::Error;
 
 /// A partial signature made by each participant of the t-out-of-n secret
 /// sharing scheme where t is the threshold required to reconstruct
@@ -54,32 +54,20 @@ impl PartialThresholdSignature {
             .ok_or_else(|| anyhow!("Missing binding value")).unwrap();
 
         // Calculate the group commitment R as Product of (Di*Ei^rho_i)*...(Dn*En^rho_n)
-        println!("---------INSIDE FROST: committing nonce to use with signature---------"); 
         let group_commitment = calculate_group_commitment(&signing_commitments, &binding_values);
-        println!("INSIDE FROST: g_r for multisig is {:?}", group_commitment);
 
         // Generate the challenge for the signature
-        println!("---------INSIDE FROST: generating address for constructing the hash preimage for the signature's challenge---------");
         let address = Address::<TestnetV0>::try_from(ComputeKey::<TestnetV0>::try_from((participant_signing_share.group_public_key.0, pr_sig)).unwrap()).unwrap();
-        println!("INSIDE FROST: address from compute key is {:?}", address);
-
-        println!("---------INSIDE FROST: constructing the hash preimage for the signature's challenge---------");
         
         let mut preimage = Vec::with_capacity(4 + message.len());
         preimage.extend([group_commitment, participant_signing_share.group_public_key.0, pr_sig, *address].map(|point| point.to_x_coordinate()));
         preimage.extend(message);
-        println!("INSIDE FROST: Hash preimage for signature challenge is {:?}", preimage);
 
-        println!("---------INSIDE FROST: constructing the signature's challenge---------");
         let challenge = Network::hash_to_scalar_psd8(&preimage).unwrap();
-        println!("INSIDE FROST: The challenge is {:?}", challenge);
 
         // Calculate the Lagrange coefficient
-        println!("---------INSIDE FROST: constructing the lambda coefficient for the signature's response ---------");
         let participant_indexes: Vec<u64> = signing_commitments.iter().map(|commitment| commitment.participant_index).collect();
-        println!("INSIDE FROST: Participant indexes is {:?}", participant_indexes);
         let lambda_i = calculate_lagrange_coefficients(participant_signing_share.participant_index, &participant_indexes).unwrap();
-        println!("INSIDE FROST: Lambda is {:?}", lambda_i);
 
         // Calculating the response for the signature
         // z_i = d_i + (e_i * rho_i) - lambda_i * s_i * c

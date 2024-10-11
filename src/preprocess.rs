@@ -1,8 +1,8 @@
 use snarkvm_console_network::{Network, TestnetV0};
-use snarkvm_console_types::{Group, Scalar, U8, U64};
-use snarkvm_console_types_scalar::{Uniform, FromField, ToField, One, Zero, Inverse};
+use snarkvm_console_types::{Group, Scalar};
+use snarkvm_console_types_scalar::Uniform;
 
-use rand::{Rng, Error};
+use rand::Rng;
 
 // The hiding and binding nonces used (only once) for signing operation
 #[derive(Clone, Debug, Copy, PartialEq, Eq)]
